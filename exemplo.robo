@@ -1,0 +1,15 @@
+iniciar robo:
+
+// define valores iniciais
+velocidade <- 5;
+tempo <- 10;
+angulo <- 90;
+
+// movimenta o robô
+distancia <- velocidade * tempo;
+andar(distancia);
+girar(angulo);
+andar(10.5);
+parar();
+
+finalizar robo.

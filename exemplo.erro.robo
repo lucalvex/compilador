@@ -1,0 +1,10 @@
+iniciar Robo:
+
+velocidade_media <- 5;
+1tempo <- 10;
+distancia <- .5 * tempo;
+angulo <- 90.;
+andar(distancia = 2);
+girar(angulo);
+
+finalizar robo.
