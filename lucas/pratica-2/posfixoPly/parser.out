@@ -1,0 +1,257 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expr
+Rule 1     expr -> expr MAIS termo
+Rule 2     expr -> expr MENOS termo
+Rule 3     expr -> termo
+Rule 4     termo -> termo ASTERISCO fator
+Rule 5     termo -> termo DIV fator
+Rule 6     termo -> termo AND fator
+Rule 7     termo -> termo OR fator
+Rule 8     termo -> fator
+Rule 9     fator -> IDENT
+
+Terminals, with rules where they appear
+
+AND                  : 6
+ASTERISCO            : 4
+DIV                  : 5
+IDENT                : 9
+MAIS                 : 1
+MENOS                : 2
+OR                   : 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+expr                 : 1 2 0
+fator                : 4 5 6 7 8
+termo                : 1 2 3 4 5 6 7
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expr
+    (1) expr -> . expr MAIS termo
+    (2) expr -> . expr MENOS termo
+    (3) expr -> . termo
+    (4) termo -> . termo ASTERISCO fator
+    (5) termo -> . termo DIV fator
+    (6) termo -> . termo AND fator
+    (7) termo -> . termo OR fator
+    (8) termo -> . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    expr                           shift and go to state 1
+    termo                          shift and go to state 2
+    fator                          shift and go to state 3
+
+state 1
+
+    (0) S' -> expr .
+    (1) expr -> expr . MAIS termo
+    (2) expr -> expr . MENOS termo
+
+    MAIS            shift and go to state 5
+    MENOS           shift and go to state 6
+
+
+state 2
+
+    (3) expr -> termo .
+    (4) termo -> termo . ASTERISCO fator
+    (5) termo -> termo . DIV fator
+    (6) termo -> termo . AND fator
+    (7) termo -> termo . OR fator
+
+    MAIS            reduce using rule 3 (expr -> termo .)
+    MENOS           reduce using rule 3 (expr -> termo .)
+    $end            reduce using rule 3 (expr -> termo .)
+    ASTERISCO       shift and go to state 7
+    DIV             shift and go to state 8
+    AND             shift and go to state 9
+    OR              shift and go to state 10
+
+
+state 3
+
+    (8) termo -> fator .
+
+    ASTERISCO       reduce using rule 8 (termo -> fator .)
+    DIV             reduce using rule 8 (termo -> fator .)
+    AND             reduce using rule 8 (termo -> fator .)
+    OR              reduce using rule 8 (termo -> fator .)
+    MAIS            reduce using rule 8 (termo -> fator .)
+    MENOS           reduce using rule 8 (termo -> fator .)
+    $end            reduce using rule 8 (termo -> fator .)
+
+
+state 4
+
+    (9) fator -> IDENT .
+
+    ASTERISCO       reduce using rule 9 (fator -> IDENT .)
+    DIV             reduce using rule 9 (fator -> IDENT .)
+    AND             reduce using rule 9 (fator -> IDENT .)
+    OR              reduce using rule 9 (fator -> IDENT .)
+    MAIS            reduce using rule 9 (fator -> IDENT .)
+    MENOS           reduce using rule 9 (fator -> IDENT .)
+    $end            reduce using rule 9 (fator -> IDENT .)
+
+
+state 5
+
+    (1) expr -> expr MAIS . termo
+    (4) termo -> . termo ASTERISCO fator
+    (5) termo -> . termo DIV fator
+    (6) termo -> . termo AND fator
+    (7) termo -> . termo OR fator
+    (8) termo -> . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    termo                          shift and go to state 11
+    fator                          shift and go to state 3
+
+state 6
+
+    (2) expr -> expr MENOS . termo
+    (4) termo -> . termo ASTERISCO fator
+    (5) termo -> . termo DIV fator
+    (6) termo -> . termo AND fator
+    (7) termo -> . termo OR fator
+    (8) termo -> . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    termo                          shift and go to state 12
+    fator                          shift and go to state 3
+
+state 7
+
+    (4) termo -> termo ASTERISCO . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    fator                          shift and go to state 13
+
+state 8
+
+    (5) termo -> termo DIV . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    fator                          shift and go to state 14
+
+state 9
+
+    (6) termo -> termo AND . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    fator                          shift and go to state 15
+
+state 10
+
+    (7) termo -> termo OR . fator
+    (9) fator -> . IDENT
+
+    IDENT           shift and go to state 4
+
+    fator                          shift and go to state 16
+
+state 11
+
+    (1) expr -> expr MAIS termo .
+    (4) termo -> termo . ASTERISCO fator
+    (5) termo -> termo . DIV fator
+    (6) termo -> termo . AND fator
+    (7) termo -> termo . OR fator
+
+    MAIS            reduce using rule 1 (expr -> expr MAIS termo .)
+    MENOS           reduce using rule 1 (expr -> expr MAIS termo .)
+    $end            reduce using rule 1 (expr -> expr MAIS termo .)
+    ASTERISCO       shift and go to state 7
+    DIV             shift and go to state 8
+    AND             shift and go to state 9
+    OR              shift and go to state 10
+
+
+state 12
+
+    (2) expr -> expr MENOS termo .
+    (4) termo -> termo . ASTERISCO fator
+    (5) termo -> termo . DIV fator
+    (6) termo -> termo . AND fator
+    (7) termo -> termo . OR fator
+
+    MAIS            reduce using rule 2 (expr -> expr MENOS termo .)
+    MENOS           reduce using rule 2 (expr -> expr MENOS termo .)
+    $end            reduce using rule 2 (expr -> expr MENOS termo .)
+    ASTERISCO       shift and go to state 7
+    DIV             shift and go to state 8
+    AND             shift and go to state 9
+    OR              shift and go to state 10
+
+
+state 13
+
+    (4) termo -> termo ASTERISCO fator .
+
+    ASTERISCO       reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    DIV             reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    AND             reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    OR              reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    MAIS            reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    MENOS           reduce using rule 4 (termo -> termo ASTERISCO fator .)
+    $end            reduce using rule 4 (termo -> termo ASTERISCO fator .)
+
+
+state 14
+
+    (5) termo -> termo DIV fator .
+
+    ASTERISCO       reduce using rule 5 (termo -> termo DIV fator .)
+    DIV             reduce using rule 5 (termo -> termo DIV fator .)
+    AND             reduce using rule 5 (termo -> termo DIV fator .)
+    OR              reduce using rule 5 (termo -> termo DIV fator .)
+    MAIS            reduce using rule 5 (termo -> termo DIV fator .)
+    MENOS           reduce using rule 5 (termo -> termo DIV fator .)
+    $end            reduce using rule 5 (termo -> termo DIV fator .)
+
+
+state 15
+
+    (6) termo -> termo AND fator .
+
+    ASTERISCO       reduce using rule 6 (termo -> termo AND fator .)
+    DIV             reduce using rule 6 (termo -> termo AND fator .)
+    AND             reduce using rule 6 (termo -> termo AND fator .)
+    OR              reduce using rule 6 (termo -> termo AND fator .)
+    MAIS            reduce using rule 6 (termo -> termo AND fator .)
+    MENOS           reduce using rule 6 (termo -> termo AND fator .)
+    $end            reduce using rule 6 (termo -> termo AND fator .)
+
+
+state 16
+
+    (7) termo -> termo OR fator .
+
+    ASTERISCO       reduce using rule 7 (termo -> termo OR fator .)
+    DIV             reduce using rule 7 (termo -> termo OR fator .)
+    AND             reduce using rule 7 (termo -> termo OR fator .)
+    OR              reduce using rule 7 (termo -> termo OR fator .)
+    MAIS            reduce using rule 7 (termo -> termo OR fator .)
+    MENOS           reduce using rule 7 (termo -> termo OR fator .)
+    $end            reduce using rule 7 (termo -> termo OR fator .)
+
