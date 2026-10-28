@@ -1,0 +1,6 @@
+// Teste 00 (CORRETO): menor programa válido.
+// Todas as listas (variáveis, funções, comandos) são vazias.
+// Esperado: compila sem erros e não imprime nada.
+program vazio {
+
+}

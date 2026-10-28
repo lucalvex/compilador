@@ -1,0 +1,14 @@
+// Teste 02 (CORRETO): precedência e associatividade de operadores. 
+// Esperado: imprime 14 20 5 3 6, depois true true.
+program expressoes {
+  int x = 2 + 3 * 4;            // 14: '*' antes de '+'
+  int y = (2 + 3) * 4;          // 20: parênteses forçam o agrupamento
+  int z = 10 - 3 - 2;           // 5: associatividade à esquerda
+  int w = 7 / 2;                // 3: divisão inteira
+  int n = -x + -y;              // -14 + 20 = 6: menos unário encadeado
+  bool p = x < y && !(z == 5) || true;    // (true && false) || true = true
+  bool q = p == (x != y);                 // true == true = true
+
+  print(x, y, z, w, n);
+  print(p, q); 
+}

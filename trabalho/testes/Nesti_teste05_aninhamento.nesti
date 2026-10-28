@@ -1,0 +1,24 @@
+// Teste 05 (CORRETO): funções aninhadas acessando escopos externos. 
+// Nível léxico: programa = 0, externa = 1, interna = 2, maisInterna = 3.
+// Esperado: imprime 119 (111 + 3 + 5).
+program aninhamento {
+  int global = 100;
+
+  fun externa(int a) => int {
+    int local = 10;
+
+    fun interna(int b) -> int {
+      int c = 1;
+
+      fun maisInterna() -> int {
+        return global + local + c;      // variáveis dos níveis 0, 1 e 2
+      }
+
+      return maisInterna() + a + b;     // a: parâmetro do nível 1
+    }
+
+    return interna(5);
+  }
+
+  print(externa(3));
+}

@@ -1,0 +1,2 @@
+program programa Program fun funcao int inteiro bool
+void x1 total_geral if ifx else while return read print true false

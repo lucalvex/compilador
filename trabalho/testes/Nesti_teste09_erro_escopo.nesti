@@ -1,0 +1,19 @@
+// Teste 09 (ERROS SEMÂNTICOS): declarações e visibilidade.
+// Esperado: um erro em cada linha marcada com ERRO.
+program erroEscopo {
+  int a;
+  bool a;                         // ERRO: 'a' redeclarado no mesmo escopo
+
+  fun f(int p, int p) -> void {   // ERRO: parâmetro 'p' repetido
+    int local = 1;
+  }
+
+  fun g() -> void {
+    local = 2;          // ERRO: 'local' pertence a f, não é visível em g 
+  } 
+
+  b = 3;                // ERRO: 'b' não declardo
+  f = 4;                // ERRO: 'f' é uma função, não variável
+  read(g);              // ERRO: read exige variável
+  h();                  // ERRO: função 'h' não declarada
+}

@@ -1,0 +1,15 @@
+// Teste 08 (ERRO SINTÁTICO): declaração de variável depoius de um comando.
+// Esperado: erro sintático na linha 7, no token 'int'.
+// A gramática exige a ordem variáveis -> funções -> comando em cada escopo.
+program erroSintatico {
+  int a;
+  a = 1;
+  int b;
+  b = a;
+}
+
+// Variações para testar aditando este arquivo (uma de cada vez):
+//      - remover o ';' de "a = 1;"
+//      - trocar "b = a;" por "b = a < 1 < 2;"    (comparação encadeada)
+//      - declarar "fun f(, int x) -> void { }"   (lista com vírgula inicial)
+//      - escrever "if (true) a = 2;"             (bloco sem chaves)

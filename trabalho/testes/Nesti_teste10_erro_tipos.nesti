@@ -1,0 +1,32 @@
+// Teste 10 (ERROS SEMÂNTICOS): tipos em expressões, atribuições e chamadas.
+// Esperado: um erro em cada linha marcada com ERRO.
+// Para não gerar erros em cascata, uma expressão que já contém erro
+// não deve produzir novas mensagens nas expressões que a usam.
+program erroTipos {
+  int a = true;               // ERRO: inicialização bool em variável int
+  bool b = 1;                 // ERRO: inicialização int em variável bool
+  int c;
+
+  fun nada() -> void {
+    return;
+  }
+
+  fun dobro(int x) -> int {
+    return x * 2;
+  }
+
+  c = a + b;                  // ERRO: '+' exige int, b é bool
+  b = a < b;                  // ERRO: '<' exige int
+  b = a == b;                 // ERRO: '==' exige operandos do mesmo tipo
+  b = !a;                     // ERRO: '!' exige bool
+  c = -b;                     // ERRO: '-' unário exige int
+  b = a && b;                 // ERRO: '&&' exige bool
+  if (a) { }                  // ERRO: condição do if deve ser bool
+  while (c + 1) { }           // ERRO: condição do while deve ser bool
+  c = nada();                 // ERRO: função void usada em expressão
+  print(nada());              // ERRO: função void usada em print
+  c = dobro(true);            // ERRO: argumento bool, parâmetro int
+  c = dobro(1, 2);            // ERRO: argumentos a mais
+  c = dobro();                // ERRO: argumentos a menos
+  b = dobro(3);               // ERRO: valor int atribuído a variável bool
+}

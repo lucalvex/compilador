@@ -1,0 +1,20 @@
+// Teste 01 (CORRETO): programa básico, sem funções.
+// Cobre: declaração com e sem inicialização, read, if/else, while, print.
+// Esperado para a entrada 3: imprime 10, depois 10 10 false.
+program basico {
+  int a;
+  int b = 10;
+  bool maior; 
+
+  read(a);
+  maior = a > b;
+  if (maior) {
+    print(a);
+  } else {
+    print(b);
+  }
+  while (a < b) {
+    a = a + 1;
+  }
+  print(a, b, maior);
+}

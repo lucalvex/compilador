@@ -1,0 +1,26 @@
+// Teste 03 (CORRETO): funções com parâmetro e os três tipos de retorno.
+// Cobre: retorno int, retorno bool, função void, chamada como comando
+// com valor descartado, chamada dentro de condição.
+// Esperado: imprime 7, depois true.
+program funcoes {
+  int resultado; 
+
+  fun soma(int a, int b) -> int {
+    return a + b;
+  }
+
+  fun ehPositivo(int n) -> bool {
+    return n > 0;
+  }
+
+  fun mostra(int v) -> void {
+    print(v);
+  }
+
+  resultado = soma(3, 4);
+  mostra(resultado);
+  if (ehPositivo(resultado)) {
+    print(true);
+  }
+  soma(1, 2);                 // valor retornado é descartado
+}

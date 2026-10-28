@@ -1,0 +1,10 @@
+// Teste 07 (ERRO LÉXICO): caracteres que não pertencem à linguagem.
+// Esperado: erro léxico na linha 7 ('@') e na linha 8 ('&' isolado).
+program erroLexico {
+  int a = 5;
+  bool p = true;
+
+  a = a @ 2;
+  p = p & false;
+  print(a, p);
+}

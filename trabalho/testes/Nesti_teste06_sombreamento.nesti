@@ -1,0 +1,25 @@
+// Teste 06 (CORRETO): sombreamento (ocultação) de identificadores.
+// Esperado: imprime true, depois 2, depois 11.
+program sombreamento {
+  int x = 1;
+
+  fun f() -> void {
+    int x = 2;            // oculta o x global
+
+    fun g() -> void {
+      bool x = true;      // oculta o x de f, com outro tipo
+      print(x);           // true
+    }
+
+    g();
+    print(x);             // 2: o x de f
+  }
+
+  fun h() -> void {
+    x = x + 10;           // sem sombreamento: altera o x global 
+  }
+
+  f();
+  h();
+  print(x);               // 11
+}

@@ -1,0 +1,19 @@
+// Teste 04 (CORRETO): recursão direta. 
+// Esperado para a entrada 5: imprime 120 5.
+program recursao {
+  int n; 
+
+  fun fatorial(int k) -> int {
+    if(k <= 1) {
+      return 1
+    }
+    return k * fatorial(k - 1);
+  }
+
+  fun fib(int k) -> int {
+    if (k < 2) {
+      return k;
+    }
+    return fib(k - 1) + fib(k - 2);
+  }
+}

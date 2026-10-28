@@ -1,0 +1,26 @@
+// Teste 11 (ERROS SEMÂNTICOS): regras do comando return.
+// Esperado: um erro em cada linha marcada com ERRO.
+program erroRetorno {
+  int x;
+
+  fun semRetorno() -> int {   // ERRO: função int sem nenhum return com expressão
+    x = 1;
+  }
+
+  fun retornoErrado() -> bool {
+    return 42;              // ERRO: retorna int em função bool
+  }
+
+  fun voidComValor() -> void {
+    return 1;               // ERRO: função void não pode retornar valor
+  }
+
+  fun intSemValor() -> int {
+    if (true) {
+      return;             // ERRO: return sem expressão em função int
+    }
+    return 1;
+  }
+
+  return 0;                   // ERRO: return fora de função
+}

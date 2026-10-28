@@ -1,13 +1,43 @@
+from ply import lex
+
+# ----------- palavras reservadas ------------
+# Chave: o texto como aparece no código-fonte 
+# Valor: o tipo de token correspondente
+
+reserved = {
+  'program': 'PROGRAM', 
+  'fun':     'FUN', 
+  'int':     'INT', 
+  'bool':    'BOOL', 
+  'void':    'VOID', 
+  'if':      'IF', 
+  'else':    'ELSE', 
+  'while':   'WHILE', 
+  'return':  'RETURN', 
+  'read':    'READ', 
+  'print':   'PRINT', 
+  'true':    'TRUE', 
+  'false':   'FALSE',
+}
+
 tokens = [
-  # palavras reservadas
-  'PROGRAM', 'FUN', 'INT', 'BOOL', 'VOID', 'IF', 'ELSE', 'WHILE', 'RETURN', 'READ', 'PRINT', 'TRUE', 'FALSE',
   # identificador e número
   'ID', 'NUMBER',
   # pontuação
   'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'SEMI', 'COMMA', 'ARROW',
   # operadores
   'ASSIGN', 'EQ', 'NE', 'LT', 'LE', 'GT', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'AND', 'OR', 'NOT',
-]
+] + list(reserved.values())
+
+# ------------- identificadores e palavras reservdas ---------------
+# Verifica se o texto está no dicionário:
+# Se tiver: passa devolve o tipo da palavra 
+# Caso contrário: devolve o tipo como ID
+# Ao final da função devolve o token com o texto com o type correto
+def t_ID(t): 
+  r'[a-zA-Z][a-zA-Z0-9_]*'
+  t.type = reserved.get(t.value, 'ID')
+  return t
 
 '''
 PALAVRAS RESERVADAS
