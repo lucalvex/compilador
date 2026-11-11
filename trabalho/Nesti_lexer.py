@@ -19,31 +19,7 @@ reserved = {
   'false':   'FALSE',
 }
 
-t_ignore = ' \t\r\n'
-
-tokens = [
-  # identificador e número
-  'ID', 'NUMBER',
-  # pontuação
-  'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'SEMI', 'COMMA', 'ARROW',
-  # operadores
-  'ASSIGN', 'EQ', 'NE', 'LT', 'LE', 'GT', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'AND', 'OR', 'NOT',
-] + list(reserved.values())
-
-# ------------- identificadores e palavras reservdas ---------------
-# Verifica se o texto está no dicionário:
-# Se tiver: passa devolve o tipo da palavra 
-# Caso contrário: devolve o tipo como ID
-# Ao final da função devolve o token com o texto com o type correto
-def t_ID(t): 
-  r'[a-zA-Z][a-zA-Z0-9_]*'
-  t.type = reserved.get(t.value, 'ID')
-  return t
-
-def t_NUMBER(t):
-  r'[0-9]+'
-  t.value = int(t.value)
-  return t
+t_ignore = ' \t\r'
 
 # ---------- Pontuação ----------
 t_LPAREN = r'\('
@@ -70,9 +46,43 @@ t_MINUS  = r'-'
 t_TIMES  = r'\*'
 t_DIVIDE = r'/'
 
+tokens = [
+  # identificador e número
+  'ID', 'NUMBER',
+  # pontuação
+  'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'SEMI', 'COMMA', 'ARROW',
+  # operadores
+  'ASSIGN', 'EQ', 'NE', 'LT', 'LE', 'GT', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'AND', 'OR', 'NOT',
+] + list(reserved.values())
+
+# ------------- identificadores e palavras reservdas ---------------
+# Verifica se o texto está no dicionário:
+# Se tiver: passa devolve o tipo da palavra 
+# Caso contrário: devolve o tipo como ID
+# Ao final da função devolve o token com o texto com o type correto
+def t_ID(t): 
+  r'[a-zA-Z][a-zA-Z0-9_]*'
+  t.type = reserved.get(t.value, 'ID')
+  return t
+
+def t_NUMBER(t):
+  r'[0-9]+'
+  t.value = int(t.value)
+  return t
+
+# -------- Comentários ------------
+def t_COMMENT(t):
+  r'//.*'
+  pass
+
+# --------- Quebras de linha -------
+def t_newline(t):
+  r'\n+'
+  t.lexer.lineno += len(t.value)
+
 # Função chamada quando nenhuma regra casa
 def t_error(t):
-  print(f"Caractere não reconhecido: {t.value[0]!r}") # !r mostra o caractere entre aspas e com caracteres especiais escapados
+  print(f"Erro léxico na linha {t.lineno}: caractere não reconhecido {t.value[0]!r}") # !r mostra o caractere entre aspas e com caracteres especiais escapados
   t.lexer.skip(1) # Avança um caractere para o léxico não ficar travado no mesmo ponto
 
 lexer = lex.lex() # Construção do léxico

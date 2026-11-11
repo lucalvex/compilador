@@ -1,0 +1,5 @@
+LINHA TIPO       VALOR
+    4 PROGRAM    'program'
+    4 ID         'vazio'
+    4 LBRACE     '{'
+    6 RBRACE     '}'
