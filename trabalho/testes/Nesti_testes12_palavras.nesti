@@ -1,0 +1,2 @@
+// Teste 12 (LÉXICO): identificadores que começam com palavras reservadas e diferença entre maiúsculas e minúsculas.
+// Esperado com --tokens: programa, funcao, inteiro, ifx e Program como ID; as demais palavras como reservadas.

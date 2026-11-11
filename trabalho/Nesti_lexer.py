@@ -3,7 +3,6 @@ from ply import lex
 # ----------- palavras reservadas ------------
 # Chave: o texto como aparece no código-fonte 
 # Valor: o tipo de token correspondente
-
 reserved = {
   'program': 'PROGRAM', 
   'fun':     'FUN', 
@@ -19,6 +18,8 @@ reserved = {
   'true':    'TRUE', 
   'false':   'FALSE',
 }
+
+t_ignore = ' \t\r\n'
 
 tokens = [
   # identificador e número
@@ -38,6 +39,43 @@ def t_ID(t):
   r'[a-zA-Z][a-zA-Z0-9_]*'
   t.type = reserved.get(t.value, 'ID')
   return t
+
+def t_NUMBER(t):
+  r'[0-9]+'
+  t.value = int(t.value)
+  return t
+
+# ---------- Pontuação ----------
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_SEMI   = r';'
+t_COMMA  = r','
+t_ARROW  = r'->'
+
+# ---------- Operadores ----------
+t_EQ     = r'=='
+t_NE     = r'!='
+t_LE     = r'<='
+t_GE     = r'>='
+t_AND    = r'&&'
+t_OR     = r'\|\|'
+t_ASSIGN = r'='
+t_LT     = r'<'
+t_GT     = r'>'
+t_NOT    = r'!'
+t_PLUS   = r'\+'
+t_MINUS  = r'-'
+t_TIMES  = r'\*'
+t_DIVIDE = r'/'
+
+# Função chamada quando nenhuma regra casa
+def t_error(t):
+  print(f"Caractere não reconhecido: {t.value[0]!r}") # !r mostra o caractere entre aspas e com caracteres especiais escapados
+  t.lexer.skip(1) # Avança um caractere para o léxico não ficar travado no mesmo ponto
+
+lexer = lex.lex() # Construção do léxico
 
 '''
 PALAVRAS RESERVADAS
