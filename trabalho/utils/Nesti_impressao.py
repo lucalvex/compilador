@@ -26,7 +26,8 @@ def _descricao(no):
     valor = getattr(no, campo)
     if not isinstance(valor, (NestiNode, list)):
       simples.append(f'{campo} = {valor!r}')
-  return f"{type(no).__name__} [linha {no.lineno}] {' '.join(simples)}"
+  texto = f"{type(no).__name__} [linha {no.lineno}] {' '.join(simples)}"
+  return texto.rstrip # Remove os espaços do final da string
 
 def _imprimir_filhos(no, prefixo):
   '''Imprime os campos de um nó que são nós ou listas, com as ligações.'''

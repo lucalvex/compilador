@@ -1,0 +1,19 @@
+program comandos {
+  int a;
+  bool b;
+
+  fun f(int x) -> void {
+    return;
+  }
+
+  read(a, b);
+  a = 1;
+  if (b) {
+    print(a);
+  } else {
+    f(a);
+  }
+  while (b) {
+    b = false;
+  }
+}

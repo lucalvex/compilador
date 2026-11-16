@@ -94,7 +94,11 @@ def p_tipo_retorno(p):
 def p_comandos(p): 
   '''comandos : comandos comando
               | empty'''
-  pass
+  if len(p) == 3:
+    p[1].append(p[2])
+    p[0] = p[1]
+  else:
+    p[0] = []
 
 def p_comando(p): 
   '''comando : atribuicao
@@ -104,55 +108,67 @@ def p_comando(p):
              | leitura
              | escrita
              | chamada_comando'''
-  pass
+  p[0] = p[1]
 
 def p_atribuicao(p):
   '''atribuicao : ID ASSIGN expressao SEMI'''
-  pass
+  p[0] = Atribuicao(p[1], p[3], p.lineno(1))
 
 def p_condicional(p): 
   '''condicional : IF LPAREN expressao RPAREN bloco
                  | IF LPAREN expressao RPAREN bloco ELSE bloco'''
+  senao = p[7] if len(p) == 8 else None
+  p[0] = Condicional(p[3], p[5], senao, p.lineno(1))
 
 def p_repeticao(p): 
   '''repeticao : WHILE LPAREN expressao RPAREN bloco'''
-  pass
+  p[0] = Repeticao(p[3], p[5], p.lineno(1))
 
 def p_bloco(p): 
   '''bloco : LBRACE comandos RBRACE'''
-  pass
+  p[0] = p[2]
 
 def p_retorno(p): 
   '''retorno : RETURN SEMI
              | RETURN expressao SEMI'''
-  pass
+  expressao = p[2] if len(p) == 4 else None
+  p[0] = Retorno(expressao, p.lineno(1))
 
 def p_leitura(p): 
   '''leitura : READ LPAREN lista_identificadores RPAREN SEMI'''
-  pass
+  p[0] = Leitura(p[3], p.lineno(1))
 
 def p_lista_identificadores(p): 
   '''lista_identificadores : lista_identificadores COMMA ID
                            | ID'''
-  pass
+  if len(p) == 4: 
+    p[1].append(p[3])
+    p[0] = p[1]
+  else:
+    p[0] = [p[1]]
 
 def p_escrita(p): 
   '''escrita : PRINT LPAREN lista_expressoes RPAREN SEMI'''
-  pass
+  p[0] = Escrita(p[3], p.lineno(1))
 
 def p_lista_expressoes(p): 
   '''lista_expressoes : lista_expressoes COMMA expressao
                       | expressao'''
-  pass
+  if len(p) == 4:
+    p[1].append(p[3])
+    p[0] = p[1]
+  else: 
+    p[0] = [p[1]]
 
 def p_chamada_comando(p): 
   '''chamada_comando : chamada SEMI'''
-  pass
+  p[0] = ComandoChamada(p[1], p[1].lineno)
 
 def p_chamada(p):
   '''chamada : ID LPAREN lista_expressoes RPAREN
              | ID LPAREN RPAREN'''
-  pass
+  argumentos = p[3] if len(p) == 5 else []
+  p[0] = Chamada(p[1], argumentos, p.lineno(1))
 
 # ---------- expressões ----------
 def p_expressao(p): 
