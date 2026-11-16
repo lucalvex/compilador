@@ -4,7 +4,7 @@
 program aninhamento {
   int global = 100;
 
-  fun externa(int a) => int {
+  fun externa(int a) -> int {
     int local = 10;
 
     fun interna(int b) -> int {

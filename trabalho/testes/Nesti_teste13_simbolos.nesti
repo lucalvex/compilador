@@ -1,0 +1,5 @@
+// Teste 13 (LÉXICO): números e símbolos especiais, inclusive operadores colados sem espaço.
+// Esperado com --tokens: ==, !=, <=, >= e -> como um único token cada; a=-1 e x<-1 separados
+// em operadores simples; números convertidos para int (007 vira 7); 2abc como NUMBER 2 e ID abc.
+a=-1 x<-1 b==c d!=e f<=g h>=i -> - --y !!p
+( ) { } ; , + * / && || 42 007 2abc

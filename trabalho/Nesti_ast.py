@@ -119,7 +119,7 @@ class OpBinaria(NestiNode):
     super().__init__(lineno)
     self.op = op                   # '+', '-', '*', '/', '<=', '>', '>=', '==', '!=', '&&', '||'
     self.esquerda = esquerda       # expressão
-    self.direira = direita         # expressão
+    self.direita = direita         # expressão
 
 class OpUnaria(NestiNode):
   '''

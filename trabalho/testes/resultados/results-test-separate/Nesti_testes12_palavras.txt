@@ -1,1 +1,1 @@
-LINHA TIPO       VALOR
+Erro sintático na linha 2: fim de arquivo inesperado.

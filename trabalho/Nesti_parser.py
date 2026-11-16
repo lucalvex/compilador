@@ -173,73 +173,107 @@ def p_chamada(p):
 # ---------- expressões ----------
 def p_expressao(p): 
   '''expressao : expressao_ou'''
-  pass
+  p[0] = p[1]
 
 def p_expressao_ou(p): 
   '''expressao_ou : expressao_ou OR expressao_e
                   | expressao_e'''
+  if len(p) == 4:
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno) # p[1].lineno é a linha do operando esquerdo, ou seja, a linha onde a expressão começa. Poderiamos usar p.lineno(2), porque OR e AND são tokens, mas, nos próximos núveis, o operador vem de um não terminal e p.lineno(2) devolveria 0. Por isso iremos padronizar usando p[1].lineno em todos os lugares
+  else: 
+    p[0] = p[1]
                   
 def p_expressao_e(p):
   '''expressao_e : expressao_e AND expressao_igualdade
                  | expressao_igualdade'''
-  pass
+  if len(p) == 4: 
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno)
+  else:
+    p[0] = p[1]
 
 def p_expressao_igualdade(p): 
   '''expressao_igualdade : expressao_igualdade operador_igualdade expressao_relacional
                          | expressao_relacional'''
-  pass
+  if len(p) == 4:
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno)
+  else: 
+    p[0] = p[1]
 
 def p_operador_igualdade(p):
   '''operador_igualdade : EQ
                         | NE'''
-  pass
+  p[0] = p[1]
 
 def p_expressao_relacional(p): 
   '''expressao_relacional : expressao_aditiva
                           | expressao_aditiva operador_relacional expressao_aditiva'''
-  pass
+  if len(p) == 4:
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno)
+  else:
+    p[0] = p[1]
 
 def p_operador_relacional(p):
   '''operador_relacional : LT
                          | LE
                          | GT
                          | GE'''
-  pass
+  p[0] = p[1]
 
 def p_expressao_aditiva(p): 
   '''expressao_aditiva : expressao_aditiva operador_aditivo expressao_multiplicativa
                        | expressao_multiplicativa'''
-  pass
+  if len(p) == 4: 
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno)
+  else: 
+    p[0] = p[1]
 
 def p_operador_aditivo(p):
   '''operador_aditivo : PLUS
                       | MINUS'''
-  pass
+  p[0] = p[1]
 
 def p_expressao_multiplicativa(p): 
   '''expressao_multiplicativa : expressao_multiplicativa operador_multiplicativo expressao_unaria
                               | expressao_unaria'''
-  pass
+  if len(p) == 4: 
+    p[0] = OpBinaria(p[2], p[1], p[3], p[1].lineno)
+  else: 
+    p[0] = p[1]
 
 def p_operador_multiplicativo(p): 
   '''operador_multiplicativo : TIMES 
                              | DIVIDE'''
-  pass
+  p[0] = p[1]
 
 def p_expressao_unaria(p): 
   '''expressao_unaria : MINUS expressao_unaria
                       | NOT expressao_unaria
                       | expressao_primaria'''
-  pass
+  if len(p) == 3: 
+    p[0] = OpUnaria(p[1], p[2], p.lineno(1))
+  else: 
+    p[0] = p[1]
 
-def p_expressao_primaria(p): 
-  '''expressao_primaria : NUMBER
-                        | TRUE
-                        | FALSE
-                        | ID
-                        | chamada 
-                        | LPAREN expressao RPAREN'''
-  pass
+def p_expressao_primaria_numero(p):
+  '''expressao_primaria : NUMBER'''
+  p[0] = Literal(p[1], 'int', p.lineno(1))
+
+def p_expressao_primaria_booleano(p):
+  '''expressao_primaria : TRUE
+                        | FALSE'''
+  p[0] = Literal(p[1] == 'true', 'bool', p.lineno(1))
+
+def p_expressao_primaria_variavel(p):
+  '''expressao_primaria : ID'''
+  p[0] = Variavel(p[1], p.lineno(1))
+
+def p_expressao_primaria_chamada(p):
+  '''expressao_primaria : chamada'''
+  p[0] = p[1]
+
+def p_expressao_primaria_parenteses(p):
+  '''expressao_primaria : LPAREN expressao RPAREN'''
+  p[0] = p[2]
 
 # ---------- auxiliares ----------
 def p_empty(p): 

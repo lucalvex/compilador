@@ -1,77 +1,47 @@
-LINHA TIPO       VALOR
-    3 PROGRAM    'program'
-    3 ID         'sombreamento'
-    3 LBRACE     '{'
-    4 INT        'int'
-    4 ID         'x'
-    4 ASSIGN     '='
-    4 NUMBER     1
-    4 SEMI       ';'
-    6 FUN        'fun'
-    6 ID         'f'
-    6 LPAREN     '('
-    6 RPAREN     ')'
-    6 ARROW      '->'
-    6 VOID       'void'
-    6 LBRACE     '{'
-    7 INT        'int'
-    7 ID         'x'
-    7 ASSIGN     '='
-    7 NUMBER     2
-    7 SEMI       ';'
-    9 FUN        'fun'
-    9 ID         'g'
-    9 LPAREN     '('
-    9 RPAREN     ')'
-    9 ARROW      '->'
-    9 VOID       'void'
-    9 LBRACE     '{'
-   10 BOOL       'bool'
-   10 ID         'x'
-   10 ASSIGN     '='
-   10 TRUE       'true'
-   10 SEMI       ';'
-   11 PRINT      'print'
-   11 LPAREN     '('
-   11 ID         'x'
-   11 RPAREN     ')'
-   11 SEMI       ';'
-   12 RBRACE     '}'
-   14 ID         'g'
-   14 LPAREN     '('
-   14 RPAREN     ')'
-   14 SEMI       ';'
-   15 PRINT      'print'
-   15 LPAREN     '('
-   15 ID         'x'
-   15 RPAREN     ')'
-   15 SEMI       ';'
-   16 RBRACE     '}'
-   18 FUN        'fun'
-   18 ID         'h'
-   18 LPAREN     '('
-   18 RPAREN     ')'
-   18 ARROW      '->'
-   18 VOID       'void'
-   18 LBRACE     '{'
-   19 ID         'x'
-   19 ASSIGN     '='
-   19 ID         'x'
-   19 PLUS       '+'
-   19 NUMBER     10
-   19 SEMI       ';'
-   20 RBRACE     '}'
-   22 ID         'f'
-   22 LPAREN     '('
-   22 RPAREN     ')'
-   22 SEMI       ';'
-   23 ID         'h'
-   23 LPAREN     '('
-   23 RPAREN     ')'
-   23 SEMI       ';'
-   24 PRINT      'print'
-   24 LPAREN     '('
-   24 ID         'x'
-   24 RPAREN     ')'
-   24 SEMI       ';'
-   25 RBRACE     '}'
+Programa [linha 3] nome = 'sombreamento'
+├── variaveis (1)
+│   └── DeclVariavel [linha 4] tipo = 'int' nome = 'x'
+│       └── inicializacao: Literal [linha 4] valor = 1 tipo = 'int'
+├── funcoes (2)
+│   ├── DeclFuncao [linha 6] nome = 'f' tipo_retorno = 'void'
+│   │   ├── parametros (0)
+│   │   ├── variaveis (1)
+│   │   │   └── DeclVariavel [linha 7] tipo = 'int' nome = 'x'
+│   │   │       └── inicializacao: Literal [linha 7] valor = 2 tipo = 'int'
+│   │   ├── funcoes (1)
+│   │   │   └── DeclFuncao [linha 9] nome = 'g' tipo_retorno = 'void'
+│   │   │       ├── parametros (0)
+│   │   │       ├── variaveis (1)
+│   │   │       │   └── DeclVariavel [linha 10] tipo = 'bool' nome = 'x'
+│   │   │       │       └── inicializacao: Literal [linha 10] valor = True tipo = 'bool'
+│   │   │       ├── funcoes (0)
+│   │   │       └── comandos (1)
+│   │   │           └── Escrita [linha 11]
+│   │   │               └── expressoes (1)
+│   │   │                   └── Variavel [linha 11] nome = 'x'
+│   │   └── comandos (2)
+│   │       ├── ComandoChamada [linha 14]
+│   │       │   └── chamada: Chamada [linha 14] nome = 'g'
+│   │       │       └── argumentos (0)
+│   │       └── Escrita [linha 15]
+│   │           └── expressoes (1)
+│   │               └── Variavel [linha 15] nome = 'x'
+│   └── DeclFuncao [linha 18] nome = 'h' tipo_retorno = 'void'
+│       ├── parametros (0)
+│       ├── variaveis (0)
+│       ├── funcoes (0)
+│       └── comandos (1)
+│           └── Atribuicao [linha 19] nome = 'x'
+│               └── expressao: OpBinaria [linha 19] op = '+'
+│                   ├── esquerda: Variavel [linha 19] nome = 'x'
+│                   └── direita: Literal [linha 19] valor = 10 tipo = 'int'
+└── comandos (3)
+    ├── ComandoChamada [linha 22]
+    │   └── chamada: Chamada [linha 22] nome = 'f'
+    │       └── argumentos (0)
+    ├── ComandoChamada [linha 23]
+    │   └── chamada: Chamada [linha 23] nome = 'h'
+    │       └── argumentos (0)
+    └── Escrita [linha 24]
+        └── expressoes (1)
+            └── Variavel [linha 24] nome = 'x'

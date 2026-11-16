@@ -5,7 +5,7 @@ program recursao {
 
   fun fatorial(int k) -> int {
     if(k <= 1) {
-      return 1
+      return 1;
     }
     return k * fatorial(k - 1);
   }
@@ -16,4 +16,7 @@ program recursao {
     }
     return fib(k - 1) + fib(k - 2);
   }
+
+  read(n);
+  print(fatorial(n), fib(n));
 }
