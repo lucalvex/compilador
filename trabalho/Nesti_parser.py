@@ -1,5 +1,6 @@
 from ply import yacc
-from Nesti_lexer import tokens
+from Nesti_lexer import tokens, lexer
+from Nesti_ast import *
 
 '''
 Tranformação aplicada seguindo a regra: 
@@ -18,54 +19,76 @@ parsers LR: cada item é reduzido assim que é lido, sem crescer a pilha.
 
 '''
 
+class ErroSintatico(Exception):
+  '''Erro sintático encontrado durante a análise'''
+  pass
+
 
 # --------------- Programa ------------------------------------------ 
 def p_programa(p): 
-  '''programa : PROGRAM ID LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE'''
-  pass
+  '''
+  programa : PROGRAM ID LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE
+  '''
+  p[0] = Programa(p[2], p[4], p[5], p[6], p.lineno(1))
 
 # --------------- Declaração de variáveis --------------------------- 
 def p_declaracoes_variaveis(p): 
   '''declaracoes_variaveis : declaracoes_variaveis declaracao_variavel
                            | empty'''
-  pass
+  if len(p) == 3:
+    p[1].append(p[2]) # acrescenta na lista existente, com o custo constante
+    p[0] = p[1]
+  else:
+    p[0] = []
 
 def p_declaracao_variavel(p):
-  '''declaracao_variavel : tipo ID SEMI
+  '''declaracao_variavel  : tipo ID SEMI
                           | tipo ID ASSIGN expressao SEMI'''
-  pass
+  inicializacao = p[4] if len(p) == 6 else None
+  p[0] = DeclVariavel(p[1], p[2], inicializacao, p.lineno(2))
 
 def p_tipo(p):
   '''tipo : INT
           | BOOL'''
-  pass
+  p[0] = p[1]
 
 # ---------- declarações de funções ----------
 def p_declaracoes_funcoes(p):
   '''declaracoes_funcoes : declaracoes_funcoes declaracao_funcao
-                        | empty'''
-  pass
+                         | empty'''
+  if len(p) == 3:
+    p[1].append(p[2])
+    p[0] = p[1]
+  else:
+    p[0] = []  
 
 def p_declaracao_funcao(p): 
-  '''declaracao_funcao : FUN ID LPAREN lista_parametros RPAREN ARROW tipo_retorno LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE
-                       | FUN ID LPAREN RPAREN ARROW tipo_retorno LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE'''
-  pass
+  '''declaracao_funcao : FUN ID LPAREN lista_parametros RPAREN ARROW tipo_retorno LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE'''
+  p[0] = DeclFuncao(p[2], p[4], p[7], p[9], p[10], p[11], p.lineno(1))
+
+def p_declaracao_funcao_sem_parametros(p):
+  '''declaracao_funcao : FUN ID LPAREN RPAREN ARROW tipo_retorno LBRACE declaracoes_variaveis declaracoes_funcoes comandos RBRACE'''
+  p[0] = DeclFuncao(p[2], [], p[6], p[8], p[9], p[10], p.lineno(1))
   
 
 def p_lista_parametros(p): 
   '''lista_parametros : lista_parametros COMMA parametro
                       | parametro'''
-  pass
+  if len(p) == 4:
+    p[1].append(p[3])
+    p[0] = p[1]
+  else: 
+    p[0] = [p[1]] # cria uma lista com um único elemento
 
 def p_parametro(p): 
   '''parametro : tipo ID'''
-  pass
+  p[0] = Parametro(p[1], p[2], p.lineno(2))
 
 def p_tipo_retorno(p): 
   '''tipo_retorno : INT
                   | BOOL
                   | VOID'''
-  pass
+  p[0] = p[1]
 
 # ---------- comandos ----------
 def p_comandos(p): 
@@ -208,6 +231,12 @@ def p_empty(p):
   pass 
 
 def p_error(p): 
-  pass
+  if p is None: 
+    raise ErroSintatico(
+      f"Erro sintático na linha {lexer.lineno}: fim de arquivo inesperado."
+    )
+  raise ErroSintatico(
+    f"Erro sintático na linha {p.lineno}: token inesperado {p.value!r}"
+  )
 
 parser = yacc.yacc()

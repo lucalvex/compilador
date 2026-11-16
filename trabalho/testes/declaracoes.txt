@@ -1,0 +1,14 @@
+program declaracoes {
+  int a;
+  bool b;
+  int c = 1;
+
+  fun f(int x, bool y) -> int {
+    int z;
+    fun g() -> void {
+    }
+  }
+
+  fun h() -> bool {
+  }
+}
