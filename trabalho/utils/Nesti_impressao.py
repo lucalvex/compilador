@@ -36,7 +36,6 @@ def _cor(texto, tipo):
 
 
 # ---------- tokens ----------
-
 def imprimir_tokens(codigo):
   '''Mostra linha, tipo e valor de cada token reconhecido pelo léxico.'''
   tipos_reservados = set(reserved.values())
@@ -53,6 +52,16 @@ def imprimir_ast(no):
   print(_descricao(no))
   _imprimir_filhos(no, '')
 
+def imprimir_tabela(escopos):
+  '''Mostra o conteúdo de cada escopo, na ordem em que foram fechados.'''
+  for escopo in escopos:
+    print(_cor(f"Escopo: {escopo.nome} (nível {escopo.nivel})", 'classe'))
+    print(f"  {'NOME':<14}{'CATEGORIA':<11}{'TIPO':<6}{'NÍVEL':<7}{'DESLOC':<8}PARÂMETROS")
+    for s in escopo.simbolos.values():
+      parametros = '' if s.parametros is None else str(s.parametros)
+      print(f"  {s.nome:<14}{s.categoria:<11}{s.tipo:<6}{s.nivel:<7}"
+            f"{str(s.deslocamento):<8}{parametros}")
+    print()
 
 def _descricao(no):
   '''Monta a linha de um nó: nome da classe, linha e campos simples.'''
