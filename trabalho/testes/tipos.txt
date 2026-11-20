@@ -1,0 +1,15 @@
+program tipos {
+  int a = 1;
+  bool b = true;
+  int c = a + b;
+  bool d = a < b;
+  bool e = a == b;
+  bool f = !a;
+  int g = -b;
+  bool h = a && b;
+  int i = z + 1;
+  int j = (a < 1) + 2;
+  bool k = a + b < 3;
+  int ok = a * 2 - 1;
+  bool ok2 = (a > 0) == b;
+}

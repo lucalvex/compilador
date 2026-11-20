@@ -25,6 +25,7 @@ CORES = {
   'ramo':      '90',    # cinza: linhas de ligação da árvore
   'reservada': '1;34',  # azul em negrito: palavras reservadas
   'token':     '36',    # ciano: demais tokens
+  'erro':      '1;31',  # vermelho em negrito: erros
 }
 
 

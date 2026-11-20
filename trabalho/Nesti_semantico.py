@@ -4,10 +4,14 @@ Análise semâmtica da linguagem Nesti
 Percorre a AST com o padrão Visitor, usadno a tabela de símbolos t_symbols
 para verificar escopos e tipos. Os erros são acumulados em uma lista e a 
 análise continua, para que todos sejam reportados de uma vez
+
+Visitar uma expressão devolve o tipo dela ('int' ou 'bool'). O valor None
+indica um erro já reportado; quem o recebe não gera nova mensagem
 '''
 
 from Nesti_visitor import NestiVisitor
 from Nesti_tabela_simbolos import TabelaSimbolos, Simbolo
+from utils.Nesti_impressao import _cor
 
 # Registro de ativação da MEPA (slides "Código MEPA: sub-rotinas"):
 #   D[k]+0 ...        variáveis locais
@@ -19,6 +23,28 @@ from Nesti_tabela_simbolos import TabelaSimbolos, Simbolo
 #                     o primeiro fica em D[k]-(4+n) e o último em D[k]-5
 #   D[k]-(5+n)        valor de retorno, reservado pelo chamador com AMEM 1
 TAMANHO_CONTROLE = 4
+
+# Regras de tipo dos operadores: operador -> (tipo exigido dos operandos, tipo do resultado)
+# Na igualdade, None indica que os operandos podem ser int ou bool, desde que iguais
+OPERADORES_BINARIOS = {
+  '+':  ('int', 'int'),
+  '-':  ('int', 'int'),
+  '*':  ('int', 'int'),
+  '/':  ('int', 'int'),
+  '<':  ('int', 'bool'),
+  '<=': ('int', 'bool'),
+  '>':  ('int', 'bool'),
+  '>=': ('int', 'bool'),
+  '==': (None, 'bool'),
+  '!=': (None, 'bool'),
+  '&&': ('bool', 'bool'),
+  '||': ('bool', 'bool'),
+}
+
+OPERADORES_UNARIOS = {
+  '-': ('int', 'int'),
+  '!': ('bool', 'bool'),
+}
 
 class AnalisadorSemantico(NestiVisitor): 
 
@@ -33,16 +59,21 @@ class AnalisadorSemantico(NestiVisitor):
   
   # ------- Auxiliares ---------
   def erro(self, lineno, mensagem): 
-    self.erros.append(f"Erro semântico na linha {lineno}: {mensagem}")
+    self.erros.append(_cor(f"Erro semântico na linha {lineno}: {mensagem}", 'erro'))
     
   def instalar(self, simbolo): 
     if not self.t_symbols.instalar(simbolo):
-      self.erro(simbolo.lineno, f"'{simbolo.nome}' já foi declarado neste escopo")
+      self.erro(simbolo.lineno, _cor(f"{simbolo.nome}' já foi declarado neste escopo", 'erro'))
   
   def fechar_escopo(self): 
     escopo = self.t_symbols.fechar_escopo()
     self.escopos_fechados.append(escopo)
     return escopo
+  
+  def exigir_tipo(self, tipo, esperado, lineno, descricao):
+    '''Reporta erro se o tipo for conhecido e diferente do esperado'''
+    if tipo is not None and tipo != esperado: 
+      self.erro(lineno, f"{descricao} deve ser {esperado}, mas é {tipo}")
   
   # -------- Programa e Declarações --------
   def visitar_Programa(self, no): 
@@ -51,12 +82,17 @@ class AnalisadorSemantico(NestiVisitor):
       self.visitar(declaracao)
     for funcao in no.funcoes: 
       self.visitar(funcao)
-    # comandos: parte A
     escopo = self.fechar_escopo()
     no.num_variaveis = escopo.num_variaveis
     
   def visitar_DeclVariavel(self, no):
-    # tipo da inicialização: parte D
+    # a inicialização é verificada antes de a variável existir:
+    # em "int x = x + 1;", o x da direita não é o que está sendo declarado
+    if no.inicializacao is not None:
+      tipo = self.visitar(no.inicializacao)
+      self.exigir_tipo(tipo, no.tipo, no.lineno,
+                       f"a inicialização de '{no.nome}'")
+      
     simbolo = Simbolo(no.nome, 'variavel', no.tipo,
                       self.t_symbols.nivel_atual,
                       self.t_symbols.novo_deslocamento(),
@@ -93,8 +129,47 @@ class AnalisadorSemantico(NestiVisitor):
       self.visitar(declaracao)
     for funcao_interna in no.funcoes:
       self.visitar(funcao_interna)
-    # comando e regras de retorno: partes A e B
     
     escopo = self.fechar_escopo()
     no.num_variaveis = escopo.num_variaveis
   
+  # ----- Expressões ----------
+  def visitar_Literal(self, no):
+    return no.tipo
+  
+  def visitar_Variavel(self, no):
+    simbolo = self.t_symbols.buscar(no.nome)
+    if simbolo is None:
+      self.erro(no.lineno, f"'{no.nome}' não foi declarado")
+      tipo = None
+    elif simbolo.categoria == 'funcao':
+      self.erro(no.lineno, f"{no.nome} é uma função e não pode ser usado como variável")
+      tipo = None
+    else:
+      no.simbolo = simbolo
+      tipo = simbolo.tipo
+      no.tipo = tipo
+      return tipo
+  
+  def visitar_OpUnaria(self, no):
+    exigido, resultado = OPERADORES_UNARIOS[no.op]
+    tipo = self.visitar(no.operando)
+    self.exigir_tipo(tipo, exigido, no.lineno, f"o operando de '{no.op}'")
+    no.tipo = resultado
+    return resultado
+  
+  def visitar_OpBinaria(self, no):
+    exigido, resultado = OPERADORES_BINARIOS[no.op]
+    tipo_esq = self.visitar(no.esquerda)
+    tipo_dir = self.visitar(no.direita)
+    
+    if exigido is None:
+      # igualdade e diferença: operandos no mesmo tipo
+      if tipo_esq is not None and tipo_dir is not None and tipo_esq != tipo_dir:
+        self.erro(no.lineno,
+                  f"os operandos de '{no.op}' devem ter o mesmo tipo, mas são {tipo_esq} e {tipo_dir}")
+    else: 
+      self.exigir_tipo(tipo_esq, exigido, no.lineno, f"o operando esquedo de '{no.op}'")
+      self.exigir_tipo(tipo_dir, exigido, no.lineno, f"o operando direito de '{no.op}'")
+    no.tipo = resultado
+    return resultado
