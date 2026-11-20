@@ -1,17 +1,20 @@
 '''
- - Nesti_impressao.py — Funções de depuração do compilador Nesti
+Nesti_impressao.py — Funções de depuração do compilador Nesti
 
- - imprimir_tokens: mostra os tokens reconhecidos pelo léxico.
- - imprimir_ast: desenha a árvore sintática abstrata com linhas de ligação.
+imprimir_tokens: mostra os tokens reconhecidos pelo léxico.
+imprimir_ast: desenha a árvore sintática abstrata com linhas de ligação.
+imprimir_tabela: mostra os escopos da tabela de símbolos.
 
- - As cores só são usadas quando a saída é o terminal
+As cores só são usadas quando a saída é o terminal. Quando a saída é
+redirecionada para um arquivo, o texto sai sem códigos de cor.
 '''
 import os
 import sys
-from Nesti_lexer import lexer, reserved
+from Nesti_lexer import lexer, reserved, reiniciar_lexer
 from Nesti_ast import NestiNode
 
 
+# ---------- Cores ----------
 USAR_CORES = sys.stdout.isatty()
 
 if USAR_CORES and sys.platform == 'win32':
@@ -28,18 +31,17 @@ CORES = {
   'erro':      '1;31',  # vermelho em negrito: erros
 }
 
-
 def _cor(texto, tipo):
   '''Envolve o texto com o código de cor do tipo indicado.'''
   if not USAR_CORES:
     return texto
   return f"\033[{CORES[tipo]}m{texto}\033[0m"
 
-
-# ---------- tokens ----------
+# ---------- Tokens ----------
 def imprimir_tokens(codigo):
-  '''Mostra linha, tipo e valor de cada token reconhecido pelo léxico.'''
+  '''Mostra linha, tipo e valor de cada token e, no final, os erros léxicos.'''
   tipos_reservados = set(reserved.values())
+  reiniciar_lexer()
   lexer.input(codigo)
   print(f"{'LINHA':>5}  {'TIPO':<10}  VALOR")
   for tok in lexer:
@@ -47,22 +49,14 @@ def imprimir_tokens(codigo):
     estilo = 'reservada' if tok.type in tipos_reservados else 'token'
     tipo = _cor(f"{tok.type:<10}", estilo)
     print(f"{linha}  {tipo}  {_cor(repr(tok.value), 'valor')}")
+  for erro in lexer.erros:
+    print(_cor(erro, 'erro'))
 
+# ---------- Árvore sintática ----------
 def imprimir_ast(no):
-  '''Imprime a árvore com linhas de ligação entre pais e filhos.'''
-  print(_descricao(no))
-  _imprimir_filhos(no, '')
-
-def imprimir_tabela(escopos):
-  '''Mostra o conteúdo de cada escopo, na ordem em que foram fechados.'''
-  for escopo in escopos:
-    print(_cor(f"Escopo: {escopo.nome} (nível {escopo.nivel})", 'classe'))
-    print(f"  {'NOME':<14}{'CATEGORIA':<11}{'TIPO':<6}{'NÍVEL':<7}{'DESLOC':<8}PARÂMETROS")
-    for s in escopo.simbolos.values():
-      parametros = '' if s.parametros is None else str(s.parametros)
-      print(f"  {s.nome:<14}{s.categoria:<11}{s.tipo:<6}{s.nivel:<7}"
-            f"{str(s.deslocamento):<8}{parametros}")
-    print()
+    '''Imprime a árvore com linhas de ligação entre pais e filhos.'''
+    print(_descricao(no))
+    _imprimir_filhos(no, '')
 
 def _descricao(no):
   '''Monta a linha de um nó: nome da classe, linha e campos simples.'''
@@ -75,6 +69,7 @@ def _descricao(no):
   linha = _cor(f"[linha {no.lineno}]", 'linha')
   texto = f"{classe} {linha} {' '.join(simples)}"
   return texto.rstrip()
+
 
 def _imprimir_filhos(no, prefixo):
   '''Imprime os campos de um nó que são nós ou listas, com as ligações.'''
@@ -101,3 +96,15 @@ def _imprimir_filhos(no, prefixo):
     else:
       print(f"{_cor(prefixo + conector, 'ramo')}{_cor(campo, 'campo')}: {_descricao(valor)}")
       _imprimir_filhos(valor, prefixo + extensao)
+
+# ---------- Tabela de símbolos ----------
+def imprimir_tabela(escopos):
+  '''Mostra o conteúdo de cada escopo, na ordem em que foram fechados.'''
+  for escopo in escopos:
+    print(_cor(f"Escopo: {escopo.nome} (nível {escopo.nivel})", 'classe'))
+    print(f"  {'NOME':<14}{'CATEGORIA':<11}{'TIPO':<6}{'NÍVEL':<7}{'DESLOC':<8}PARÂMETROS")
+    for s in escopo.simbolos.values():
+      parametros = '' if s.parametros is None else str(s.parametros)
+      print(f"  {s.nome:<14}{s.categoria:<11}{s.tipo:<6}{s.nivel:<7}"
+            f"{str(s.deslocamento):<8}{parametros}")
+    print()

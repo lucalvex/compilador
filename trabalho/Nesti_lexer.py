@@ -1,3 +1,7 @@
+'''
+Os erros léxicos não são impressos: ficam na lista lexer.erros, para que o
+programa principal decida o que fazer com eles
+'''
 from ply import lex
 
 # ----------- palavras reservadas ------------
@@ -46,6 +50,7 @@ t_MINUS  = r'-'
 t_TIMES  = r'\*'
 t_DIVIDE = r'/'
 
+
 tokens = [
   # identificador e número
   'ID', 'NUMBER',
@@ -73,7 +78,7 @@ def t_NUMBER(t):
 # -------- Comentários ------------
 def t_COMMENT(t):
   r'//.*'
-  pass
+  pass    # sem return: o comentário é reconhecido e descartado
 
 # --------- Quebras de linha -------
 def t_newline(t):
@@ -82,10 +87,25 @@ def t_newline(t):
 
 # Função chamada quando nenhuma regra casa
 def t_error(t):
-  print(f"Erro léxico na linha {t.lineno}: caractere não reconhecido {t.value[0]!r}") # !r mostra o caractere entre aspas e com caracteres especiais escapados
+  t.lexer.erros.append(
+    f"Erro léxico na linha {t.lineno}: caractere não reconhecido {t.value[0]!r}") # !r mostra o caractere entre aspas e com caracteres especiais escapados
   t.lexer.skip(1) # Avança um caractere para o léxico não ficar travado no mesmo ponto
 
 lexer = lex.lex() # Construção do léxico
+lexer.erros = []
+
+def reiniciar_lexer():
+  '''Volta o contador de linhas para 1 e esvazia a lista de erros.'''
+  lexer.lineno = 1
+  lexer.erros = []
+
+def verificar_lexico(codigo):
+  '''Lê o arquivo inteiro só com o léxico e devolve a lista de erros léxicos.'''
+  reiniciar_lexer()
+  lexer.input(codigo)
+  for _ in lexer:
+    pass
+  return lexer.erros
 
 '''
 PALAVRAS RESERVADAS
