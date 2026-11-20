@@ -1,335 +1,16 @@
 === Nesti_teste00_vazio.nesti
-Programa [linha 4] nome = 'vazio'
-├── variaveis (0)
-├── funcoes (0)
-└── comandos (0)
 
 === Nesti_teste01_basico.nesti
-Programa [linha 4] nome = 'basico'
-├── variaveis (3)
-│   ├── DeclVariavel [linha 5] tipo = 'int' nome = 'a' inicializacao = None
-│   ├── DeclVariavel [linha 6] tipo = 'int' nome = 'b'
-│   │   └── inicializacao: Literal [linha 6] valor = 10 tipo = 'int'
-│   └── DeclVariavel [linha 7] tipo = 'bool' nome = 'maior' inicializacao = None
-├── funcoes (0)
-└── comandos (5)
-    ├── Leitura [linha 9]
-    │   └── nomes (1)
-    │       └── 'a'
-    ├── Atribuicao [linha 10] nome = 'maior'
-    │   └── expressao: OpBinaria [linha 10] op = '>'
-    │       ├── esquerda: Variavel [linha 10] nome = 'a'
-    │       └── direita: Variavel [linha 10] nome = 'b'
-    ├── Condicional [linha 11]
-    │   ├── condicao: Variavel [linha 11] nome = 'maior'
-    │   ├── entao (1)
-    │   │   └── Escrita [linha 12]
-    │   │       └── expressoes (1)
-    │   │           └── Variavel [linha 12] nome = 'a'
-    │   └── senao (1)
-    │       └── Escrita [linha 14]
-    │           └── expressoes (1)
-    │               └── Variavel [linha 14] nome = 'b'
-    ├── Repeticao [linha 16]
-    │   ├── condicao: OpBinaria [linha 16] op = '<'
-    │   │   ├── esquerda: Variavel [linha 16] nome = 'a'
-    │   │   └── direita: Variavel [linha 16] nome = 'b'
-    │   └── corpo (1)
-    │       └── Atribuicao [linha 17] nome = 'a'
-    │           └── expressao: OpBinaria [linha 17] op = '+'
-    │               ├── esquerda: Variavel [linha 17] nome = 'a'
-    │               └── direita: Literal [linha 17] valor = 1 tipo = 'int'
-    └── Escrita [linha 19]
-        └── expressoes (3)
-            ├── Variavel [linha 19] nome = 'a'
-            ├── Variavel [linha 19] nome = 'b'
-            └── Variavel [linha 19] nome = 'maior'
 
 === Nesti_teste02_expressoes.nesti
-Programa [linha 3] nome = 'expressoes'
-├── variaveis (7)
-│   ├── DeclVariavel [linha 4] tipo = 'int' nome = 'x'
-│   │   └── inicializacao: OpBinaria [linha 4] op = '+'
-│   │       ├── esquerda: Literal [linha 4] valor = 2 tipo = 'int'
-│   │       └── direita: OpBinaria [linha 4] op = '*'
-│   │           ├── esquerda: Literal [linha 4] valor = 3 tipo = 'int'
-│   │           └── direita: Literal [linha 4] valor = 4 tipo = 'int'
-│   ├── DeclVariavel [linha 5] tipo = 'int' nome = 'y'
-│   │   └── inicializacao: OpBinaria [linha 5] op = '*'
-│   │       ├── esquerda: OpBinaria [linha 5] op = '+'
-│   │       │   ├── esquerda: Literal [linha 5] valor = 2 tipo = 'int'
-│   │       │   └── direita: Literal [linha 5] valor = 3 tipo = 'int'
-│   │       └── direita: Literal [linha 5] valor = 4 tipo = 'int'
-│   ├── DeclVariavel [linha 6] tipo = 'int' nome = 'z'
-│   │   └── inicializacao: OpBinaria [linha 6] op = '-'
-│   │       ├── esquerda: OpBinaria [linha 6] op = '-'
-│   │       │   ├── esquerda: Literal [linha 6] valor = 10 tipo = 'int'
-│   │       │   └── direita: Literal [linha 6] valor = 3 tipo = 'int'
-│   │       └── direita: Literal [linha 6] valor = 2 tipo = 'int'
-│   ├── DeclVariavel [linha 7] tipo = 'int' nome = 'w'
-│   │   └── inicializacao: OpBinaria [linha 7] op = '/'
-│   │       ├── esquerda: Literal [linha 7] valor = 7 tipo = 'int'
-│   │       └── direita: Literal [linha 7] valor = 2 tipo = 'int'
-│   ├── DeclVariavel [linha 8] tipo = 'int' nome = 'n'
-│   │   └── inicializacao: OpBinaria [linha 8] op = '+'
-│   │       ├── esquerda: OpUnaria [linha 8] op = '-'
-│   │       │   └── operando: Variavel [linha 8] nome = 'x'
-│   │       └── direita: OpUnaria [linha 8] op = '-'
-│   │           └── operando: OpUnaria [linha 8] op = '-'
-│   │               └── operando: Variavel [linha 8] nome = 'y'
-│   ├── DeclVariavel [linha 9] tipo = 'bool' nome = 'p'
-│   │   └── inicializacao: OpBinaria [linha 9] op = '||'
-│   │       ├── esquerda: OpBinaria [linha 9] op = '&&'
-│   │       │   ├── esquerda: OpBinaria [linha 9] op = '<'
-│   │       │   │   ├── esquerda: Variavel [linha 9] nome = 'x'
-│   │       │   │   └── direita: Variavel [linha 9] nome = 'y'
-│   │       │   └── direita: OpUnaria [linha 9] op = '!'
-│   │       │       └── operando: OpBinaria [linha 9] op = '=='
-│   │       │           ├── esquerda: Variavel [linha 9] nome = 'z'
-│   │       │           └── direita: Literal [linha 9] valor = 5 tipo = 'int'
-│   │       └── direita: Literal [linha 9] valor = True tipo = 'bool'
-│   └── DeclVariavel [linha 10] tipo = 'bool' nome = 'q'
-│       └── inicializacao: OpBinaria [linha 10] op = '=='
-│           ├── esquerda: Variavel [linha 10] nome = 'p'
-│           └── direita: OpBinaria [linha 10] op = '!='
-│               ├── esquerda: Variavel [linha 10] nome = 'x'
-│               └── direita: Variavel [linha 10] nome = 'y'
-├── funcoes (0)
-└── comandos (2)
-    ├── Escrita [linha 12]
-    │   └── expressoes (5)
-    │       ├── Variavel [linha 12] nome = 'x'
-    │       ├── Variavel [linha 12] nome = 'y'
-    │       ├── Variavel [linha 12] nome = 'z'
-    │       ├── Variavel [linha 12] nome = 'w'
-    │       └── Variavel [linha 12] nome = 'n'
-    └── Escrita [linha 13]
-        └── expressoes (2)
-            ├── Variavel [linha 13] nome = 'p'
-            └── Variavel [linha 13] nome = 'q'
 
 === Nesti_teste03_funcoes.nesti
-Programa [linha 5] nome = 'funcoes'
-├── variaveis (1)
-│   └── DeclVariavel [linha 6] tipo = 'int' nome = 'resultado' inicializacao = None
-├── funcoes (3)
-│   ├── DeclFuncao [linha 8] nome = 'soma' tipo_retorno = 'int'
-│   │   ├── parametros (2)
-│   │   │   ├── Parametro [linha 8] tipo = 'int' nome = 'a'
-│   │   │   └── Parametro [linha 8] tipo = 'int' nome = 'b'
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Retorno [linha 9]
-│   │           └── expressao: OpBinaria [linha 9] op = '+'
-│   │               ├── esquerda: Variavel [linha 9] nome = 'a'
-│   │               └── direita: Variavel [linha 9] nome = 'b'
-│   ├── DeclFuncao [linha 12] nome = 'ehPositivo' tipo_retorno = 'bool'
-│   │   ├── parametros (1)
-│   │   │   └── Parametro [linha 12] tipo = 'int' nome = 'n'
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Retorno [linha 13]
-│   │           └── expressao: OpBinaria [linha 13] op = '>'
-│   │               ├── esquerda: Variavel [linha 13] nome = 'n'
-│   │               └── direita: Literal [linha 13] valor = 0 tipo = 'int'
-│   └── DeclFuncao [linha 16] nome = 'mostra' tipo_retorno = 'void'
-│       ├── parametros (1)
-│       │   └── Parametro [linha 16] tipo = 'int' nome = 'v'
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (1)
-│           └── Escrita [linha 17]
-│               └── expressoes (1)
-│                   └── Variavel [linha 17] nome = 'v'
-└── comandos (4)
-    ├── Atribuicao [linha 20] nome = 'resultado'
-    │   └── expressao: Chamada [linha 20] nome = 'soma'
-    │       └── argumentos (2)
-    │           ├── Literal [linha 20] valor = 3 tipo = 'int'
-    │           └── Literal [linha 20] valor = 4 tipo = 'int'
-    ├── ComandoChamada [linha 21]
-    │   └── chamada: Chamada [linha 21] nome = 'mostra'
-    │       └── argumentos (1)
-    │           └── Variavel [linha 21] nome = 'resultado'
-    ├── Condicional [linha 22] senao = None
-    │   ├── condicao: Chamada [linha 22] nome = 'ehPositivo'
-    │   │   └── argumentos (1)
-    │   │       └── Variavel [linha 22] nome = 'resultado'
-    │   └── entao (1)
-    │       └── Escrita [linha 23]
-    │           └── expressoes (1)
-    │               └── Literal [linha 23] valor = True tipo = 'bool'
-    └── ComandoChamada [linha 25]
-        └── chamada: Chamada [linha 25] nome = 'soma'
-            └── argumentos (2)
-                ├── Literal [linha 25] valor = 1 tipo = 'int'
-                └── Literal [linha 25] valor = 2 tipo = 'int'
 
 === Nesti_teste04_recursao.nesti
-Programa [linha 3] nome = 'recursao'
-├── variaveis (1)
-│   └── DeclVariavel [linha 4] tipo = 'int' nome = 'n' inicializacao = None
-├── funcoes (2)
-│   ├── DeclFuncao [linha 6] nome = 'fatorial' tipo_retorno = 'int'
-│   │   ├── parametros (1)
-│   │   │   └── Parametro [linha 6] tipo = 'int' nome = 'k'
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (2)
-│   │       ├── Condicional [linha 7] senao = None
-│   │       │   ├── condicao: OpBinaria [linha 7] op = '<='
-│   │       │   │   ├── esquerda: Variavel [linha 7] nome = 'k'
-│   │       │   │   └── direita: Literal [linha 7] valor = 1 tipo = 'int'
-│   │       │   └── entao (1)
-│   │       │       └── Retorno [linha 8]
-│   │       │           └── expressao: Literal [linha 8] valor = 1 tipo = 'int'
-│   │       └── Retorno [linha 10]
-│   │           └── expressao: OpBinaria [linha 10] op = '*'
-│   │               ├── esquerda: Variavel [linha 10] nome = 'k'
-│   │               └── direita: Chamada [linha 10] nome = 'fatorial'
-│   │                   └── argumentos (1)
-│   │                       └── OpBinaria [linha 10] op = '-'
-│   │                           ├── esquerda: Variavel [linha 10] nome = 'k'
-│   │                           └── direita: Literal [linha 10] valor = 1 tipo = 'int'
-│   └── DeclFuncao [linha 13] nome = 'fib' tipo_retorno = 'int'
-│       ├── parametros (1)
-│       │   └── Parametro [linha 13] tipo = 'int' nome = 'k'
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (2)
-│           ├── Condicional [linha 14] senao = None
-│           │   ├── condicao: OpBinaria [linha 14] op = '<'
-│           │   │   ├── esquerda: Variavel [linha 14] nome = 'k'
-│           │   │   └── direita: Literal [linha 14] valor = 2 tipo = 'int'
-│           │   └── entao (1)
-│           │       └── Retorno [linha 15]
-│           │           └── expressao: Variavel [linha 15] nome = 'k'
-│           └── Retorno [linha 17]
-│               └── expressao: OpBinaria [linha 17] op = '+'
-│                   ├── esquerda: Chamada [linha 17] nome = 'fib'
-│                   │   └── argumentos (1)
-│                   │       └── OpBinaria [linha 17] op = '-'
-│                   │           ├── esquerda: Variavel [linha 17] nome = 'k'
-│                   │           └── direita: Literal [linha 17] valor = 1 tipo = 'int'
-│                   └── direita: Chamada [linha 17] nome = 'fib'
-│                       └── argumentos (1)
-│                           └── OpBinaria [linha 17] op = '-'
-│                               ├── esquerda: Variavel [linha 17] nome = 'k'
-│                               └── direita: Literal [linha 17] valor = 2 tipo = 'int'
-└── comandos (2)
-    ├── Leitura [linha 20]
-    │   └── nomes (1)
-    │       └── 'n'
-    └── Escrita [linha 21]
-        └── expressoes (2)
-            ├── Chamada [linha 21] nome = 'fatorial'
-            │   └── argumentos (1)
-            │       └── Variavel [linha 21] nome = 'n'
-            └── Chamada [linha 21] nome = 'fib'
-                └── argumentos (1)
-                    └── Variavel [linha 21] nome = 'n'
 
 === Nesti_teste05_aninhamento.nesti
-Programa [linha 4] nome = 'aninhamento'
-├── variaveis (1)
-│   └── DeclVariavel [linha 5] tipo = 'int' nome = 'global'
-│       └── inicializacao: Literal [linha 5] valor = 100 tipo = 'int'
-├── funcoes (1)
-│   └── DeclFuncao [linha 7] nome = 'externa' tipo_retorno = 'int'
-│       ├── parametros (1)
-│       │   └── Parametro [linha 7] tipo = 'int' nome = 'a'
-│       ├── variaveis (1)
-│       │   └── DeclVariavel [linha 8] tipo = 'int' nome = 'local'
-│       │       └── inicializacao: Literal [linha 8] valor = 10 tipo = 'int'
-│       ├── funcoes (1)
-│       │   └── DeclFuncao [linha 10] nome = 'interna' tipo_retorno = 'int'
-│       │       ├── parametros (1)
-│       │       │   └── Parametro [linha 10] tipo = 'int' nome = 'b'
-│       │       ├── variaveis (1)
-│       │       │   └── DeclVariavel [linha 11] tipo = 'int' nome = 'c'
-│       │       │       └── inicializacao: Literal [linha 11] valor = 1 tipo = 'int'
-│       │       ├── funcoes (1)
-│       │       │   └── DeclFuncao [linha 13] nome = 'maisInterna' tipo_retorno = 'int'
-│       │       │       ├── parametros (0)
-│       │       │       ├── variaveis (0)
-│       │       │       ├── funcoes (0)
-│       │       │       └── comandos (1)
-│       │       │           └── Retorno [linha 14]
-│       │       │               └── expressao: OpBinaria [linha 14] op = '+'
-│       │       │                   ├── esquerda: OpBinaria [linha 14] op = '+'
-│       │       │                   │   ├── esquerda: Variavel [linha 14] nome = 'global'
-│       │       │                   │   └── direita: Variavel [linha 14] nome = 'local'
-│       │       │                   └── direita: Variavel [linha 14] nome = 'c'
-│       │       └── comandos (1)
-│       │           └── Retorno [linha 17]
-│       │               └── expressao: OpBinaria [linha 17] op = '+'
-│       │                   ├── esquerda: OpBinaria [linha 17] op = '+'
-│       │                   │   ├── esquerda: Chamada [linha 17] nome = 'maisInterna'
-│       │                   │   │   └── argumentos (0)
-│       │                   │   └── direita: Variavel [linha 17] nome = 'a'
-│       │                   └── direita: Variavel [linha 17] nome = 'b'
-│       └── comandos (1)
-│           └── Retorno [linha 20]
-│               └── expressao: Chamada [linha 20] nome = 'interna'
-│                   └── argumentos (1)
-│                       └── Literal [linha 20] valor = 5 tipo = 'int'
-└── comandos (1)
-    └── Escrita [linha 23]
-        └── expressoes (1)
-            └── Chamada [linha 23] nome = 'externa'
-                └── argumentos (1)
-                    └── Literal [linha 23] valor = 3 tipo = 'int'
 
 === Nesti_teste06_sombreamento.nesti
-Programa [linha 3] nome = 'sombreamento'
-├── variaveis (1)
-│   └── DeclVariavel [linha 4] tipo = 'int' nome = 'x'
-│       └── inicializacao: Literal [linha 4] valor = 1 tipo = 'int'
-├── funcoes (2)
-│   ├── DeclFuncao [linha 6] nome = 'f' tipo_retorno = 'void'
-│   │   ├── parametros (0)
-│   │   ├── variaveis (1)
-│   │   │   └── DeclVariavel [linha 7] tipo = 'int' nome = 'x'
-│   │   │       └── inicializacao: Literal [linha 7] valor = 2 tipo = 'int'
-│   │   ├── funcoes (1)
-│   │   │   └── DeclFuncao [linha 9] nome = 'g' tipo_retorno = 'void'
-│   │   │       ├── parametros (0)
-│   │   │       ├── variaveis (1)
-│   │   │       │   └── DeclVariavel [linha 10] tipo = 'bool' nome = 'x'
-│   │   │       │       └── inicializacao: Literal [linha 10] valor = True tipo = 'bool'
-│   │   │       ├── funcoes (0)
-│   │   │       └── comandos (1)
-│   │   │           └── Escrita [linha 11]
-│   │   │               └── expressoes (1)
-│   │   │                   └── Variavel [linha 11] nome = 'x'
-│   │   └── comandos (2)
-│   │       ├── ComandoChamada [linha 14]
-│   │       │   └── chamada: Chamada [linha 14] nome = 'g'
-│   │       │       └── argumentos (0)
-│   │       └── Escrita [linha 15]
-│   │           └── expressoes (1)
-│   │               └── Variavel [linha 15] nome = 'x'
-│   └── DeclFuncao [linha 18] nome = 'h' tipo_retorno = 'void'
-│       ├── parametros (0)
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (1)
-│           └── Atribuicao [linha 19] nome = 'x'
-│               └── expressao: OpBinaria [linha 19] op = '+'
-│                   ├── esquerda: Variavel [linha 19] nome = 'x'
-│                   └── direita: Literal [linha 19] valor = 10 tipo = 'int'
-└── comandos (3)
-    ├── ComandoChamada [linha 22]
-    │   └── chamada: Chamada [linha 22] nome = 'f'
-    │       └── argumentos (0)
-    ├── ComandoChamada [linha 23]
-    │   └── chamada: Chamada [linha 23] nome = 'h'
-    │       └── argumentos (0)
-    └── Escrita [linha 24]
-        └── expressoes (1)
-            └── Variavel [linha 24] nome = 'x'
 
 === Nesti_teste07_erro_lexico.nesti
 Erro léxico na linha 7: caractere não reconhecido '@'
@@ -339,159 +20,38 @@ Erro sintático na linha 7: token inesperado 2
 Erro sintático na linha 7: token inesperado 'int'
 
 === Nesti_teste09_erro_escopo.nesti
-Programa [linha 3] nome = 'erroEscopo'
-├── variaveis (2)
-│   ├── DeclVariavel [linha 4] tipo = 'int' nome = 'a' inicializacao = None
-│   └── DeclVariavel [linha 5] tipo = 'bool' nome = 'a' inicializacao = None
-├── funcoes (2)
-│   ├── DeclFuncao [linha 7] nome = 'f' tipo_retorno = 'void'
-│   │   ├── parametros (2)
-│   │   │   ├── Parametro [linha 7] tipo = 'int' nome = 'p'
-│   │   │   └── Parametro [linha 7] tipo = 'int' nome = 'p'
-│   │   ├── variaveis (1)
-│   │   │   └── DeclVariavel [linha 8] tipo = 'int' nome = 'local'
-│   │   │       └── inicializacao: Literal [linha 8] valor = 1 tipo = 'int'
-│   │   ├── funcoes (0)
-│   │   └── comandos (0)
-│   └── DeclFuncao [linha 11] nome = 'g' tipo_retorno = 'void'
-│       ├── parametros (0)
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (1)
-│           └── Atribuicao [linha 12] nome = 'local'
-│               └── expressao: Literal [linha 12] valor = 2 tipo = 'int'
-└── comandos (4)
-    ├── Atribuicao [linha 15] nome = 'b'
-    │   └── expressao: Literal [linha 15] valor = 3 tipo = 'int'
-    ├── Atribuicao [linha 16] nome = 'f'
-    │   └── expressao: Literal [linha 16] valor = 4 tipo = 'int'
-    ├── Leitura [linha 17]
-    │   └── nomes (1)
-    │       └── 'g'
-    └── ComandoChamada [linha 18]
-        └── chamada: Chamada [linha 18] nome = 'h'
-            └── argumentos (0)
+Erro semântico na linha 5: 'a' já foi declarado neste escopo
+Erro semântico na linha 7: 'p' já foi declarado neste escopo
+Erro semântico na linha 12: 'local' não foi declarado
+Erro semântico na linha 15: 'b' não foi declarado
+Erro semântico na linha 16: 'f' é uma função, não uma variável
+Erro semântico na linha 17: 'g' é uma função, não uma variável
+Erro semântico na linha 18: 'h' não foi declarado
 
 === Nesti_teste10_erro_tipos.nesti
-Programa [linha 5] nome = 'erroTipos'
-├── variaveis (3)
-│   ├── DeclVariavel [linha 6] tipo = 'int' nome = 'a'
-│   │   └── inicializacao: Literal [linha 6] valor = True tipo = 'bool'
-│   ├── DeclVariavel [linha 7] tipo = 'bool' nome = 'b'
-│   │   └── inicializacao: Literal [linha 7] valor = 1 tipo = 'int'
-│   └── DeclVariavel [linha 8] tipo = 'int' nome = 'c' inicializacao = None
-├── funcoes (2)
-│   ├── DeclFuncao [linha 10] nome = 'nada' tipo_retorno = 'void'
-│   │   ├── parametros (0)
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Retorno [linha 11] expressao = None
-│   └── DeclFuncao [linha 14] nome = 'dobro' tipo_retorno = 'int'
-│       ├── parametros (1)
-│       │   └── Parametro [linha 14] tipo = 'int' nome = 'x'
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (1)
-│           └── Retorno [linha 15]
-│               └── expressao: OpBinaria [linha 15] op = '*'
-│                   ├── esquerda: Variavel [linha 15] nome = 'x'
-│                   └── direita: Literal [linha 15] valor = 2 tipo = 'int'
-└── comandos (14)
-    ├── Atribuicao [linha 18] nome = 'c'
-    │   └── expressao: OpBinaria [linha 18] op = '+'
-    │       ├── esquerda: Variavel [linha 18] nome = 'a'
-    │       └── direita: Variavel [linha 18] nome = 'b'
-    ├── Atribuicao [linha 19] nome = 'b'
-    │   └── expressao: OpBinaria [linha 19] op = '<'
-    │       ├── esquerda: Variavel [linha 19] nome = 'a'
-    │       └── direita: Variavel [linha 19] nome = 'b'
-    ├── Atribuicao [linha 20] nome = 'b'
-    │   └── expressao: OpBinaria [linha 20] op = '=='
-    │       ├── esquerda: Variavel [linha 20] nome = 'a'
-    │       └── direita: Variavel [linha 20] nome = 'b'
-    ├── Atribuicao [linha 21] nome = 'b'
-    │   └── expressao: OpUnaria [linha 21] op = '!'
-    │       └── operando: Variavel [linha 21] nome = 'a'
-    ├── Atribuicao [linha 22] nome = 'c'
-    │   └── expressao: OpUnaria [linha 22] op = '-'
-    │       └── operando: Variavel [linha 22] nome = 'b'
-    ├── Atribuicao [linha 23] nome = 'b'
-    │   └── expressao: OpBinaria [linha 23] op = '&&'
-    │       ├── esquerda: Variavel [linha 23] nome = 'a'
-    │       └── direita: Variavel [linha 23] nome = 'b'
-    ├── Condicional [linha 24] senao = None
-    │   ├── condicao: Variavel [linha 24] nome = 'a'
-    │   └── entao (0)
-    ├── Repeticao [linha 25]
-    │   ├── condicao: OpBinaria [linha 25] op = '+'
-    │   │   ├── esquerda: Variavel [linha 25] nome = 'c'
-    │   │   └── direita: Literal [linha 25] valor = 1 tipo = 'int'
-    │   └── corpo (0)
-    ├── Atribuicao [linha 26] nome = 'c'
-    │   └── expressao: Chamada [linha 26] nome = 'nada'
-    │       └── argumentos (0)
-    ├── Escrita [linha 27]
-    │   └── expressoes (1)
-    │       └── Chamada [linha 27] nome = 'nada'
-    │           └── argumentos (0)
-    ├── Atribuicao [linha 28] nome = 'c'
-    │   └── expressao: Chamada [linha 28] nome = 'dobro'
-    │       └── argumentos (1)
-    │           └── Literal [linha 28] valor = True tipo = 'bool'
-    ├── Atribuicao [linha 29] nome = 'c'
-    │   └── expressao: Chamada [linha 29] nome = 'dobro'
-    │       └── argumentos (2)
-    │           ├── Literal [linha 29] valor = 1 tipo = 'int'
-    │           └── Literal [linha 29] valor = 2 tipo = 'int'
-    ├── Atribuicao [linha 30] nome = 'c'
-    │   └── expressao: Chamada [linha 30] nome = 'dobro'
-    │       └── argumentos (0)
-    └── Atribuicao [linha 31] nome = 'b'
-        └── expressao: Chamada [linha 31] nome = 'dobro'
-            └── argumentos (1)
-                └── Literal [linha 31] valor = 3 tipo = 'int'
+Erro semântico na linha 6: a inicialização de 'a' deve ser int, mas é bool
+Erro semântico na linha 7: a inicialização de 'b' deve ser bool, mas é int
+Erro semântico na linha 18: o operando direito de '+' deve ser int, mas é bool
+Erro semântico na linha 19: o operando direito de '<' deve ser int, mas é bool
+Erro semântico na linha 20: os operandos de '==' devem ter o mesmo tipo, mas são int e bool
+Erro semântico na linha 21: o operando de '!' deve ser bool, mas é int
+Erro semântico na linha 22: o operando de '-' deve ser int, mas é bool
+Erro semântico na linha 23: o operando esquerdo de '&&' deve ser bool, mas é int
+Erro semântico na linha 24: a condição do if deve ser bool, mas é int
+Erro semântico na linha 25: a condição do while deve ser bool, mas é int
+Erro semântico na linha 26: o valor atribuído a 'c' deve ser int, mas é void
+Erro semântico na linha 27: o argumento do print deve ser int ou bool, mas é void
+Erro semântico na linha 28: o argumento 1 de 'dobro' deve ser int, mas é bool
+Erro semântico na linha 29: 'dobro' espera 1 argumento(s), mas recebeu 2
+Erro semântico na linha 30: 'dobro' espera 1 argumento(s), mas recebeu 0
+Erro semântico na linha 31: o valor atribuído a 'b' deve ser bool, mas é int
 
 === Nesti_teste11_erro_retorno.nesti
-Programa [linha 3] nome = 'erroRetorno'
-├── variaveis (1)
-│   └── DeclVariavel [linha 4] tipo = 'int' nome = 'x' inicializacao = None
-├── funcoes (4)
-│   ├── DeclFuncao [linha 6] nome = 'semRetorno' tipo_retorno = 'int'
-│   │   ├── parametros (0)
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Atribuicao [linha 7] nome = 'x'
-│   │           └── expressao: Literal [linha 7] valor = 1 tipo = 'int'
-│   ├── DeclFuncao [linha 10] nome = 'retornoErrado' tipo_retorno = 'bool'
-│   │   ├── parametros (0)
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Retorno [linha 11]
-│   │           └── expressao: Literal [linha 11] valor = 42 tipo = 'int'
-│   ├── DeclFuncao [linha 14] nome = 'voidComValor' tipo_retorno = 'void'
-│   │   ├── parametros (0)
-│   │   ├── variaveis (0)
-│   │   ├── funcoes (0)
-│   │   └── comandos (1)
-│   │       └── Retorno [linha 15]
-│   │           └── expressao: Literal [linha 15] valor = 1 tipo = 'int'
-│   └── DeclFuncao [linha 18] nome = 'intSemValor' tipo_retorno = 'int'
-│       ├── parametros (0)
-│       ├── variaveis (0)
-│       ├── funcoes (0)
-│       └── comandos (2)
-│           ├── Condicional [linha 19] senao = None
-│           │   ├── condicao: Literal [linha 19] valor = True tipo = 'bool'
-│           │   └── entao (1)
-│           │       └── Retorno [linha 20] expressao = None
-│           └── Retorno [linha 22]
-│               └── expressao: Literal [linha 22] valor = 1 tipo = 'int'
-└── comandos (1)
-    └── Retorno [linha 25]
-        └── expressao: Literal [linha 25] valor = 0 tipo = 'int'
+Erro semântico na linha 6: a função 'semRetorno' deve ter pelo menos um return com valor do tipo int
+Erro semântico na linha 11: o valor retornado por 'retornoErrado' deve ser bool, mas é int
+Erro semântico na linha 15: a função void 'voidComValor' não pode retornar um valor
+Erro semântico na linha 20: o return da função 'intSemValor' precisa de um valor do tipo int
+Erro semântico na linha 25: return fora de uma função
 
 === Nesti_teste12_palavras.nesti
 Erro sintático na linha 3: token inesperado 'Program'

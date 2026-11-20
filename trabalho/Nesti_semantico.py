@@ -5,8 +5,9 @@ Percorre a AST com o padrão Visitor, usadno a tabela de símbolos t_symbols
 para verificar escopos e tipos. Os erros são acumulados em uma lista e a 
 análise continua, para que todos sejam reportados de uma vez
 
-Visitar uma expressão devolve o tipo dela ('int' ou 'bool'). O valor None
-indica um erro já reportado; quem o recebe não gera nova mensagem
+Visitar uma expressão devolve o tipo dela ('int', 'bool' ou, numa chamada a
+uma função sem retorno, 'void'). O valor None indica um erro já reportado;
+quem o recebe não gera nova mensagem
 '''
 
 from Nesti_visitor import NestiVisitor
@@ -54,7 +55,9 @@ class AnalisadorSemantico(NestiVisitor):
   def __init__(self):
     self.t_symbols = TabelaSimbolos()
     self.erros = []
-    self.escopos_fechados = []    # para p modo --tabela
+    self.escopos_fechados = []            # para p modo --tabela
+    self.funcao_atual = None              # símbolo da função em análise; None no programa principal
+    self.tem_retorno_com_valor = False    # a função atual já tem um return com expressão?
     
   def analisar(self, programa):
     self.visitar(programa)
@@ -66,7 +69,7 @@ class AnalisadorSemantico(NestiVisitor):
     
   def instalar(self, simbolo): 
     if not self.t_symbols.instalar(simbolo):
-      self.erro(simbolo.lineno, f"{simbolo.nome}' já foi declarado neste escopo")
+      self.erro(simbolo.lineno, f"'{simbolo.nome}' já foi declarado neste escopo")
   
   def fechar_escopo(self): 
     escopo = self.t_symbols.fechar_escopo()
@@ -132,7 +135,13 @@ class AnalisadorSemantico(NestiVisitor):
     self.instalar(funcao)
     no.simbolo = funcao
     
-    # 2. o corpo tem o próprio escopo
+    # 2. guarda o contexto da função externa (aninhamento) e entra na nova função
+    funcao_anterior = self.funcao_atual
+    retorno_anterior = self.tem_retorno_com_valor
+    self.funcao_atual = funcao
+    self.tem_retorno_com_valor = False
+    
+    # 3. o corpo tem o próprio escopo
     self.t_symbols.abrir_escopo(f"função {no.nome}")
     
     # parâmetro i (a partir de 0): -(n + 4) + i, do primeiro em -(4 + n) ao último em -5
@@ -148,9 +157,19 @@ class AnalisadorSemantico(NestiVisitor):
       self.visitar(declaracao)
     for funcao_interna in no.funcoes:
       self.visitar(funcao_interna)
+    self.visitar_comandos(no.comandos)
     
     escopo = self.fechar_escopo()
     no.num_variaveis = escopo.num_variaveis
+    
+    # 4. funções int e bool precisam de pelo menos um return com expressão
+    if no.tipo_retorno != 'void' and not self.tem_retorno_com_valor:
+      self.erro(no.lineno,
+                f"a função '{no.nome}' deve ter pelo menos um return com valor do tipo {no.tipo_retorno}")
+    
+    # 5. volta ao contexto da função externa
+    self.funcao_atual = funcao_anterior
+    self.tem_retorno_com_valor = retorno_anterior
   
   # ----- Comandos -----------
   def visitar_Atribuicao(self, no):
@@ -181,7 +200,30 @@ class AnalisadorSemantico(NestiVisitor):
     for expressao in no.expressoes:
       tipo = self.visitar(expressao)
       if tipo is not None and tipo not in TIPOS_DE_VALOR:
-        self.erro(no.lineno, f'o argumento do print deve ser int ou bool, mas é tipo {tipo}')
+        self.erro(no.lineno, f'o argumento do print deve ser int ou bool, mas é {tipo}')
+  
+  def visitar_ComandoChamada(self, no):
+    # Como comando, a chamada pode ser de qualquer tipo; o valor é descartado 
+    self.visitar(no.chamada)
+  
+  def visitar_Retorno(self, no):
+    funcao = self.funcao_atual
+    no.funcao = funcao
+    tipo = self.visitar(no.expressao) if no.expressao is not None else None
+    
+    if funcao is None:
+      self.erro(no.lineno, "return fora de uma função")
+    elif funcao.tipo == 'void':
+      if no.expressao is not None:
+        self.erro(no.lineno, 
+                  f"a função void '{funcao.nome}' não pode retornar um valor")
+    elif no.expressao is None:
+      self.erro(no.lineno,
+                f"o return da função '{funcao.nome}' precisa de um valor do tipo {funcao.tipo}")
+    else:
+      self.tem_retorno_com_valor = True
+      self.exigir_tipo(tipo, funcao.tipo, no.lineno,
+                       f"o valor retornado por '{funcao.nome}'")
   
   # ----- Expressões ----------
   def visitar_Literal(self, no):
@@ -193,6 +235,35 @@ class AnalisadorSemantico(NestiVisitor):
     no.tipo = simbolo.tipo if simbolo is not None else None
     return no.tipo
   
+  def visitar_Chamada(self, no):
+    # os argumentos são verificados sempre, mesmo que a função não exista
+    tipos_argumentos = [self.visitar(argumento) for argumento in no.argumentos]
+
+    simbolo = self.t_symbols.buscar(no.nome)
+    no.simbolo = None
+    no.tipo = None
+
+    if simbolo is None:
+      self.erro(no.lineno, f"'{no.nome}' não foi declarado")
+      return None
+    if simbolo.categoria != 'funcao':
+      self.erro(no.lineno, f"'{no.nome}' não é uma função")
+      return None
+
+    esperados = simbolo.parametros
+    if len(tipos_argumentos) != len(esperados):
+      self.erro(no.lineno,
+                f"'{no.nome}' espera {len(esperados)} argumento(s), "
+                f"mas recebeu {len(tipos_argumentos)}")
+    else:
+      for i, (tipo, esperado) in enumerate(zip(tipos_argumentos, esperados)):
+        self.exigir_tipo(tipo, esperado, no.lineno,
+                          f"o argumento {i + 1} de '{no.nome}'")
+        
+    no.simbolo = simbolo
+    no.tipo = simbolo.tipo
+    return simbolo.tipo
+
   def visitar_OpUnaria(self, no):
     exigido, resultado = OPERADORES_UNARIOS[no.op]
     tipo = self.visitar(no.operando)
@@ -211,7 +282,7 @@ class AnalisadorSemantico(NestiVisitor):
         self.erro(no.lineno,
                   f"os operandos de '{no.op}' devem ter o mesmo tipo, mas são {tipo_esq} e {tipo_dir}")
     else: 
-      self.exigir_tipo(tipo_esq, exigido, no.lineno, f"o operando esquedo de '{no.op}'")
+      self.exigir_tipo(tipo_esq, exigido, no.lineno, f"o operando esquerdo de '{no.op}'")
       self.exigir_tipo(tipo_dir, exigido, no.lineno, f"o operando direito de '{no.op}'")
     no.tipo = resultado
     return resultado
