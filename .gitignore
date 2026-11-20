@@ -1,3 +1,7 @@
+# Parser
 parsetab.py
 parser.out
 __pycache__/
+
+# Resultados de testes
+testes/resultados/

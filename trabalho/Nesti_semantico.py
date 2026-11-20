@@ -46,6 +46,9 @@ OPERADORES_UNARIOS = {
   '!': ('bool', 'bool'),
 }
 
+# Tipos que podem ser lidos, impressos ou usados como valor
+TIPOS_DE_VALOR = ('int', 'bool')
+
 class AnalisadorSemantico(NestiVisitor): 
 
   def __init__(self):
@@ -63,7 +66,7 @@ class AnalisadorSemantico(NestiVisitor):
     
   def instalar(self, simbolo): 
     if not self.t_symbols.instalar(simbolo):
-      self.erro(simbolo.lineno, _cor(f"{simbolo.nome}' já foi declarado neste escopo", 'erro'))
+      self.erro(simbolo.lineno, f"{simbolo.nome}' já foi declarado neste escopo")
   
   def fechar_escopo(self): 
     escopo = self.t_symbols.fechar_escopo()
@@ -75,6 +78,21 @@ class AnalisadorSemantico(NestiVisitor):
     if tipo is not None and tipo != esperado: 
       self.erro(lineno, f"{descricao} deve ser {esperado}, mas é {tipo}")
   
+  def buscar_variavel(self, nome, lineno):
+    '''Busca um nome que precisa ser variável ou parâmetro. Devolve o símbolo ou None'''
+    simbolo = self.t_symbols.buscar(nome)
+    if simbolo is None:
+      self.erro(lineno, f"'{nome}' não foi declarado")
+      return None
+    if simbolo.categoria == 'funcao':
+      self.erro(lineno, f"'{nome}' é uma função, não uma variável")
+      return None
+    return simbolo
+  
+  def visitar_comandos(self, comandos):
+    for comando in comandos:
+      self.visitar(comando)
+  
   # -------- Programa e Declarações --------
   def visitar_Programa(self, no): 
     self.t_symbols.abrir_escopo(f"programa {no.nome}")
@@ -82,6 +100,7 @@ class AnalisadorSemantico(NestiVisitor):
       self.visitar(declaracao)
     for funcao in no.funcoes: 
       self.visitar(funcao)
+    self.visitar_comandos(no.comandos)
     escopo = self.fechar_escopo()
     no.num_variaveis = escopo.num_variaveis
     
@@ -133,23 +152,46 @@ class AnalisadorSemantico(NestiVisitor):
     escopo = self.fechar_escopo()
     no.num_variaveis = escopo.num_variaveis
   
+  # ----- Comandos -----------
+  def visitar_Atribuicao(self, no):
+    simbolo = self.buscar_variavel(no.nome, no.lineno)
+    tipo = self.visitar(no.expressao)
+    if simbolo is not None:
+      self.exigir_tipo(tipo, simbolo.tipo, no.lineno,
+                       f"o valor atribuído a '{no.nome}'")
+    no.simbolo = simbolo
+    
+  def visitar_Condicional(self, no):
+    tipo = self.visitar(no.condicao)
+    self.exigir_tipo(tipo, 'bool', no.lineno, 'a condição do if')
+    self.visitar_comandos(no.entao)
+    if no.senao is not None:
+      self.visitar_comandos(no.senao)
+  
+  def visitar_Repeticao(self, no):
+    tipo = self.visitar(no.condicao)
+    self.exigir_tipo(tipo, 'bool', no.lineno, 'a condição do while')
+    self.visitar_comandos(no.corpo)
+  
+  def visitar_Leitura(self, no):
+    # toda variável é int ou bool, então basta ela existir e ser uma variável 
+    no.simbolos = [self.buscar_variavel(nome, no.lineno) for nome in no.nomes]
+  
+  def visitar_Escrita(self, no):
+    for expressao in no.expressoes:
+      tipo = self.visitar(expressao)
+      if tipo is not None and tipo not in TIPOS_DE_VALOR:
+        self.erro(no.lineno, f'o argumento do print deve ser int ou bool, mas é tipo {tipo}')
+  
   # ----- Expressões ----------
   def visitar_Literal(self, no):
     return no.tipo
   
   def visitar_Variavel(self, no):
-    simbolo = self.t_symbols.buscar(no.nome)
-    if simbolo is None:
-      self.erro(no.lineno, f"'{no.nome}' não foi declarado")
-      tipo = None
-    elif simbolo.categoria == 'funcao':
-      self.erro(no.lineno, f"{no.nome} é uma função e não pode ser usado como variável")
-      tipo = None
-    else:
-      no.simbolo = simbolo
-      tipo = simbolo.tipo
-      no.tipo = tipo
-      return tipo
+    simbolo = self.buscar_variavel(no.nome, no.lineno)
+    no.simbolo = simbolo
+    no.tipo = simbolo.tipo if simbolo is not None else None
+    return no.tipo
   
   def visitar_OpUnaria(self, no):
     exigido, resultado = OPERADORES_UNARIOS[no.op]

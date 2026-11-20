@@ -1,0 +1,17 @@
+program cmds {
+  int a;
+  bool b;
+
+  a = true;
+  b = a + 1;
+  x = 1;
+  if (a) {
+    a = 1;
+  } else {
+    b = 2;
+  }
+  while (a + 1) {
+    read(a, b, y);
+  }
+  print(a, b, a < 1);
+}
